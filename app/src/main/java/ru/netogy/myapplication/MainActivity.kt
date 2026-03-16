@@ -30,9 +30,6 @@ class MainActivity : AppCompatActivity() {
             countOfLikes.text = changeOne(post.likes)
             countOfShares.text = changeOne(post.shares)
 
-            if (post.likedByMe) {
-                (like as ImageView).setImageResource(R.drawable.ic_liked_24dp)
-            }
             like.setOnClickListener {
                 if (post.likedByMe) post.likes-- else post.likes++
                 post.likedByMe = !post.likedByMe

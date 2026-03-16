@@ -1,7 +1,6 @@
 package ru.netogy.myapplication
 
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -30,9 +29,6 @@ class MainActivity : AppCompatActivity() {
             countOfLikes.text = changeOne(post.likes)
             countOfShares.text = changeOne(post.shares)
 
-            if (post.likedByMe) {
-                (like as ImageView).setImageResource(R.drawable.ic_liked_24dp)
-            }
             like.setOnClickListener {
                 if (post.likedByMe) post.likes-- else post.likes++
                 post.likedByMe = !post.likedByMe

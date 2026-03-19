@@ -21,7 +21,7 @@ fun changeOne (a: Int): String {
 
 private fun changeWithComma(a: Int, c: Int, f: String): String {
     val d = (a/c).toInt()
-    val e = ((a - d)/(c/10)).toInt()
+    val e = ((a - d*c)/(c/10)).toInt()
     return "$d" + ",$e" + f
 }
 private fun changeWithoutComma(a: Int): String {

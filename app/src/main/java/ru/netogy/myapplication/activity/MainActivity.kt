@@ -6,9 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import ru.netogy.myapplication.R
+import ru.netogy.myapplication.adapter.PostAdapter
 import ru.netogy.myapplication.databinding.ActivityMainBinding
-import ru.netogy.myapplication.dto.changeOne
 import ru.netogy.myapplication.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -23,24 +22,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val viewModel by viewModels<PostViewModel>()
-        viewModel.data.observe(this) { post ->
-
-            with(binding) {
-                author.text = post.author
-                published.text = post.published
-                content.text = post.content
-                like.setImageResource(if (post.likedByMe) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp)
-                countOfLikes.text = changeOne(post.likes)
-                countOfShares.text = changeOne(post.shares)
-
-            }
-        }
-        binding.like.setOnClickListener {
-            viewModel.like()
-        }
-        binding.share.setOnClickListener {
-            viewModel.share()
+        val viewModel: PostViewModel by viewModels()
+        val adapter = PostAdapter({viewModel.likeById(it.id)}, {viewModel.shareById(it.id)})
+        binding.list.adapter = adapter
+        viewModel.data.observe(this) { posts ->
+            adapter.submitList(posts)
         }
     }
 }

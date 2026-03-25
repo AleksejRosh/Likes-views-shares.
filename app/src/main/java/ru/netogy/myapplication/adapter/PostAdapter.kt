@@ -2,6 +2,7 @@ package ru.netogy.myapplication.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,15 +11,19 @@ import ru.netogy.myapplication.databinding.CardPostBinding
 import ru.netogy.myapplication.dto.Post
 import ru.netogy.myapplication.dto.changeOne
 
-typealias LikeListener = (Post) -> Unit
-typealias ShareListener = (Post) -> Unit
+interface PostListener {
+    fun onEdit(post: Post)
+    fun onLike(post: Post)
+    fun onShare(post: Post)
+    fun onDelete(post: Post)
+}
 
-class PostAdapter(private val likeListener: LikeListener, private val shareListener: ShareListener): ListAdapter<Post, PostViewHolder>(
+class PostAdapter(private val listener: PostListener): ListAdapter<Post, PostViewHolder>(
     PostDiffCallback
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, likeListener, shareListener)
+        return PostViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(viewHolder: PostViewHolder, position: Int) {
@@ -28,7 +33,7 @@ class PostAdapter(private val likeListener: LikeListener, private val shareListe
 
 }
 
-class PostViewHolder(private val binding: CardPostBinding, private val likeListener: LikeListener, private val shareListener: ShareListener): RecyclerView.ViewHolder(binding.root) {
+class PostViewHolder(private val binding: CardPostBinding, private val listener: PostListener): RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         with (binding) {
             author.text = post.author
@@ -38,10 +43,30 @@ class PostViewHolder(private val binding: CardPostBinding, private val likeListe
             countOfLikes.text = changeOne(post.likes)
             countOfShares.text = changeOne(post.shares)
             like.setOnClickListener {
-                likeListener(post)
+                listener.onLike(post)
             }
             share.setOnClickListener {
-                shareListener(post)
+                listener.onShare(post)
+            }
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.menu_post)
+
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.delete -> {
+                                listener.onDelete(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                listener.onEdit(post)
+                                true
+                            } else -> false
+                        }
+
+                    }
+                        show()
+                }
             }
         }
     }

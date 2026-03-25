@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toStartOf="@id/menu"
         app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="@string/author" />
+        tools:text= "author" />
 
     <TextView
         android:id="@+id/published"
@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="@id/barrier"
         app:layout_constraintEnd_toStartOf="@id/menu"
         app:layout_constraintStart_toEndOf="@id/avatar"
-        tools:text="@string/published" />
+        tools:text="published" />
 
     <ImageButton
         android:id="@+id/menu"
@@ -72,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
-        tools:text="@string/content" />
+        tools:text="content" />
 
     <ImageButton
         android:id="@+id/like"
@@ -93,7 +93,7 @@
         android:layout_marginStart="@dimen/small_spacing"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintStart_toEndOf="@+id/like"
-        tools:text="@string/count_of_likes"/>
+        tools:text="3"/>
 
     <TextView
         android:id="@+id/count_of_views"
@@ -103,7 +103,7 @@
         android:layout_marginEnd="@dimen/common_spacing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content"
-        tools:text="@string/count_of_views"/>
+        tools:text="11"/>
 
     <ImageView
         android:id="@+id/views"
@@ -137,6 +137,6 @@
         android:layout_marginStart="@dimen/small_spacing"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintStart_toEndOf="@+id/share"
-        tools:text="@string/count_of_shares"/>
+        tools:text="1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

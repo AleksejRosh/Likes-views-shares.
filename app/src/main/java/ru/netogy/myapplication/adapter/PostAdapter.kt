@@ -39,9 +39,9 @@ class PostViewHolder(private val binding: CardPostBinding, private val listener:
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            like.setImageResource(if (post.likedByMe) R.drawable.ic_liked_24dp else R.drawable.ic_like_24dp)
-            countOfLikes.text = changeOne(post.likes)
-            countOfShares.text = changeOne(post.shares)
+            like.isChecked = post.likedByMe
+            like.text = changeOne(post.likes)
+            share.text = changeOne(post.shares)
             like.setOnClickListener {
                 listener.onLike(post)
             }

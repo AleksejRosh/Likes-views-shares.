@@ -11,4 +11,8 @@
     <string name="error_empty_content">Content can\'t be empty</string>
     <string name="edit">Edit</string>
     <string name="close">Close to stop editing</string>
+    <string name="description_post_share">Share post</string>
+    <string name="description_post_save">Save post</string>
+    <string name="description_for_video">The video</string>
+    <string name="description_for_play">Open the video</string>
 </resources>

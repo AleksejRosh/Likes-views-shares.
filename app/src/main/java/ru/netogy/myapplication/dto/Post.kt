@@ -1,5 +1,6 @@
 package ru.netogy.myapplication.dto
 
+
 data class Post (
     val id: Long,
     val author: String,
@@ -7,7 +8,8 @@ data class Post (
     val content: String,
     val likes: Int = 0,
     val likedByMe: Boolean = false,
-    val shares: Int = 0
+    val shares: Int = 0,
+    val video: String = ""
 )
 
 fun changeOne (a: Int): String {
@@ -20,11 +22,11 @@ fun changeOne (a: Int): String {
 }
 
 private fun changeWithComma(a: Int, c: Int, f: String): String {
-    val d = (a/c).toInt()
-    val e = ((a - d*c)/(c/10)).toInt()
+    val d = (a/c)
+    val e = ((a - d*c)/(c/10))
     return "$d" + ",$e" + f
 }
 private fun changeWithoutComma(a: Int): String {
-    val b = (a/1_000).toInt().toString()
+    val b = (a/1_000).toString()
     return b + "K"
 }

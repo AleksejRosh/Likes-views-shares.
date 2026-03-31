@@ -1,7 +1,7 @@
 package ru.netogy.myapplication.activity
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,11 +9,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.netogy.myapplication.adapter.PostAdapter
 import ru.netogy.myapplication.databinding.ActivityMainBinding
-import ru.netogy.myapplication.util.AndroidUtils
 import ru.netogy.myapplication.viewmodel.PostViewModel
 import ru.netogy.myapplication.R
 import ru.netogy.myapplication.adapter.PostListener
 import ru.netogy.myapplication.dto.Post
+import kotlin.apply
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +28,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         val viewModel: PostViewModel by viewModels()
+        val newPostLauncher = registerForActivityResult(NewPostContract) { text ->
+            val result = text?: return@registerForActivityResult
+            viewModel.save(result)
+        }
         val adapter = PostAdapter(object : PostListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
+                newPostLauncher.launch(post.content)
             }
 
             override fun onLike(post: Post) {
@@ -38,6 +43,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onShare(post: Post) {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                }
+                val chooser = Intent.createChooser(intent, getString(R.string.description_post_share))
+                startActivity(chooser)
                 viewModel.shareById(post.id)
             }
 
@@ -49,39 +61,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.data.observe(this) { posts ->
             adapter.submitList(posts)
         }
-        viewModel.edited.observe(this) { post ->
-            if (post.id != 0L) {
-                binding.group.visibility = android.view.View.VISIBLE
-                with(binding.content) {
-                    setText(post.content)
-                    AndroidUtils.showKeyboard(this)
-                }
-            }
-        }
-        binding.save.setOnClickListener {
-            binding.group.visibility = android.view.View.GONE
-            with (binding.content) {
-                if (text.isNullOrBlank()) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        context.getString(R.string.error_empty_content),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setOnClickListener
-                }
-                viewModel.save(text.toString())
 
-                setText("")
-                clearFocus()
-                AndroidUtils.hideKeyboard(this)
-            }
-        }
-
-        binding.close.setOnClickListener {
-            viewModel.cancelEdit()
-            binding.content.text?.clear()
-            AndroidUtils.hideKeyboard(binding.content)
-            binding.group.visibility = android.view.View.GONE
+        binding.add.setOnClickListener {
+            newPostLauncher.launch("")
         }
 
     }

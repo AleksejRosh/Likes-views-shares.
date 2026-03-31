@@ -26,9 +26,6 @@ class PostViewModel: ViewModel() {
     fun edit(post: Post){
         edited.value = post
     }
-    fun cancelEdit() {
-        edited.value = empty
-    }
 }
 private val empty = Post(
     id = 0,

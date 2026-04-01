@@ -30,13 +30,16 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel: PostViewModel by viewModels()
         val newPostLauncher = registerForActivityResult(NewPostContract) { text ->
-            val result = text?: return@registerForActivityResult
-            viewModel.save(result)
+            if (text == null) {
+                viewModel.cancelEdit()
+                return@registerForActivityResult
+            }
+            viewModel.save(text)
         }
         val adapter = PostAdapter(object : PostListener {
             override fun onEdit(post: Post) {
+                newPostLauncher.launch(post)
                 viewModel.edit(post)
-                newPostLauncher.launch(post.content)
             }
 
             override fun onLike(post: Post) {
@@ -71,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.add.setOnClickListener {
-            newPostLauncher.launch("")
+            newPostLauncher.launch(null)
         }
 
     }

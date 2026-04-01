@@ -32,7 +32,7 @@ class PostRepositoryInMemoryImpl: PostRepository {
 
     override fun getAll(): LiveData<List<Post>> = data
 
-    private var nextId = posts.first().id + 3
+    private var nextId = 3L
 
     override fun likeById(id: Long) {
         posts = posts.map {

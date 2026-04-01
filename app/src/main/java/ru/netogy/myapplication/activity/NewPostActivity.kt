@@ -11,7 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.netogy.myapplication.R
 import ru.netogy.myapplication.databinding.ActivityNewPostBinding
-
+import ru.netogy.myapplication.dto.Post
 
 
 class NewPostActivity : AppCompatActivity() {
@@ -40,11 +40,11 @@ class NewPostActivity : AppCompatActivity() {
     }
 }
 
-object NewPostContract: ActivityResultContract<String, String?>() {
+object NewPostContract: ActivityResultContract<Post?, String?>() {
     const val KEY_TEXT = "post_text"
-    override fun createIntent(context: Context, input: String): Intent {
+    override fun createIntent(context: Context, input: Post?): Intent {
         val intent = Intent(context, NewPostActivity::class.java)
-        intent.putExtra(KEY_TEXT, input)
+        intent.putExtra(KEY_TEXT, input?.content)
         return intent
     }
     override fun parseResult(resultCode: Int, intent: Intent?) = intent?.getStringExtra(KEY_TEXT)

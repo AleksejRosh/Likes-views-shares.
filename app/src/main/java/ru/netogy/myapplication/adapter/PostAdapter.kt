@@ -46,7 +46,7 @@ class PostViewHolder(private val binding: CardPostBinding, private val listener:
             share.text = changeOne(post.shares)
             if (post.video != "") {
                 group.visibility = View.VISIBLE
-            }
+            } else group.visibility = View.GONE
             video.setOnClickListener {
                 listener.onPlay(post)
             }

@@ -23,8 +23,11 @@ class PostViewModel: ViewModel() {
         }
         edited.value = empty
     }
-    fun edit(post: Post){
+    fun edit(post: Post) {
         edited.value = post
+    }
+    fun cancelEdit() {
+        edited.value = empty
     }
 }
 private val empty = Post(

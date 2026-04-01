@@ -23,7 +23,8 @@ class PostRepositoryInMemoryImpl: PostRepository {
             3,
             "Netology. Университет интернет-профессий будущего",
             "20 мая в 12:46",
-            "Привет, это новая Нетология!"
+            "Привет, это новая Нетология!",
+            video = "https://rutube.ru/video/cb7b3c0aad5c8a1e5cf5d22f59cc65b3/"
         )
     )
 

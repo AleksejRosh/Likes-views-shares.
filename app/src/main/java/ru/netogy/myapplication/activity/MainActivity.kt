@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ru.netogy.myapplication.adapter.PostAdapter
@@ -55,6 +56,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onDelete(post: Post) {
                 viewModel.deleteById(post.id)
+            }
+
+            override fun onPlay(post: Post) {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = (post.video).toUri()
+                }
+                startActivity(intent)
             }
         })
         binding.list.adapter = adapter

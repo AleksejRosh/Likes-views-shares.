@@ -1,6 +1,7 @@
 package ru.netogy.myapplication.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -16,6 +17,7 @@ interface PostListener {
     fun onLike(post: Post)
     fun onShare(post: Post)
     fun onDelete(post: Post)
+    fun onPlay(post: Post)
 }
 
 class PostAdapter(private val listener: PostListener): ListAdapter<Post, PostViewHolder>(
@@ -42,6 +44,15 @@ class PostViewHolder(private val binding: CardPostBinding, private val listener:
             like.isChecked = post.likedByMe
             like.text = changeOne(post.likes)
             share.text = changeOne(post.shares)
+            if (post.video != "") {
+                group.visibility = View.VISIBLE
+            }
+            video.setOnClickListener {
+                listener.onPlay(post)
+            }
+            play.setOnClickListener {
+                listener.onPlay(post)
+            }
             like.setOnClickListener {
                 listener.onLike(post)
             }

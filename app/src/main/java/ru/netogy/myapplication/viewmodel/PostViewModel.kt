@@ -1,13 +1,14 @@
 package ru.netogy.myapplication.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import ru.netogy.myapplication.dto.Post
 import ru.netogy.myapplication.repository.PostRepository
-import ru.netogy.myapplication.repository.PostRepositoryInMemoryImpl
+import ru.netogy.myapplication.repository.PostRepositoryFileImpl
 
-class PostViewModel: ViewModel() {
-    private val repository: PostRepository = PostRepositoryInMemoryImpl()
+class PostViewModel(application: Application): AndroidViewModel(application) {
+    private val repository: PostRepository = PostRepositoryFileImpl(application)
     val data = repository.getAll()
     val edited = MutableLiveData(empty)
     fun likeById(id: Long) = repository.likeById(id)

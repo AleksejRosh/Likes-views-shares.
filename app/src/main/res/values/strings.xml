@@ -15,4 +15,5 @@
     <string name="description_post_save">Save post</string>
     <string name="description_for_video">The video</string>
     <string name="description_for_play">Open the video</string>
+    <string name="make_a_post">Make a post</string>
 </resources>

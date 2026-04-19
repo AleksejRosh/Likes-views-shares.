@@ -18,6 +18,7 @@ interface PostListener {
     fun onShare(post: Post)
     fun onDelete(post: Post)
     fun onPlay(post: Post)
+    fun onShow(post: Post)
 }
 
 class PostAdapter(private val listener: PostListener): ListAdapter<Post, PostViewHolder>(
@@ -78,6 +79,9 @@ class PostViewHolder(private val binding: CardPostBinding, private val listener:
                     }
                         show()
                 }
+            }
+            cardPost.setOnClickListener {
+                listener.onShow(post)
             }
         }
     }

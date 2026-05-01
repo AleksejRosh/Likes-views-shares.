@@ -27,18 +27,27 @@ class NewPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentNewPostBinding.inflate(layoutInflater)
-        arguments?.textArg?.let(binding.edit::setText)
-        binding.edit.setText(arguments?.getString("content"))
-//        if (arguments?.getString("draft") != "") {
-//            binding.edit.setText(arguments?.getString("draft"))
-//        } else binding.edit.setText(arguments?.getString("content"))
-//        val callback = object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                viewModel.saveDraft(binding.edit.text.toString())
-//                findNavController().navigateUp()
-//            }
-//        }
-//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        arguments?.textArg?.let { binding.edit.setText(it) }
+        if (arguments?.getString("draft") != "") {
+            binding.edit.setText(arguments?.getString("draft"))
+        } else binding.edit.setText(arguments?.getString("content"))
+
+        if (binding.edit.text.isBlank()) {
+            viewModel.lastDraft.observe(viewLifecycleOwner) { draftPost ->
+                draftPost?.let {
+                    if (!it.draft.isBlank()) {
+                        binding.edit.setText(it.draft)
+                    }
+                }
+            }
+        }
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.saveDraft(binding.edit.text.toString())
+                findNavController().navigateUp()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding.ok.setOnClickListener {
             val text = binding.edit.text.toString()

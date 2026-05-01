@@ -9,6 +9,8 @@ class PostRepositorySQLiteImpl(private val dao: PostDao): PostRepository {
 
     private var posts = emptyList<Post>()
     private val data = MutableLiveData(posts)
+    private val lastDraft = MutableLiveData<Post?>(null)
+    override fun getLastDraft(): LiveData<Post?> = lastDraft
 
     init {
         posts = dao.getAll()
@@ -50,6 +52,10 @@ class PostRepositorySQLiteImpl(private val dao: PostDao): PostRepository {
         data.value = posts
     }
 
+    override fun saveDraft(post: Post) {
+        val saved = dao.saveDraft(post)
+        lastDraft.value = saved
+    }
 
 
 }

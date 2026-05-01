@@ -10,7 +10,7 @@ data class Post (
     val likedByMe: Boolean = false,
     val shares: Int = 0,
     val video: String = "",
-    //val draft: String = ""
+    val draft: String = ""
 )
 
 fun changeOne (a: Int): String {

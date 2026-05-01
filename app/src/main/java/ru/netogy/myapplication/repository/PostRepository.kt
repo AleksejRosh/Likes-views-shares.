@@ -9,4 +9,6 @@ interface PostRepository {
     fun shareById(id: Long)
     fun deleteById(id: Long)
     fun save(post: Post)
+    fun saveDraft(post: Post)
+    fun getLastDraft(): LiveData<Post?>
 }

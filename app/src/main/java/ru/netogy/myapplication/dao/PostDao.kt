@@ -8,4 +8,5 @@ interface PostDao {
     fun likeById(id: Long)
     fun removeById(id: Long)
     fun shareById(id: Long)
+    fun saveDraft(post: Post): Post
 }

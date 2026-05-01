@@ -28,7 +28,7 @@ class FeedFragment : Fragment() {
         val adapter = PostAdapter(object : PostListener {
             override fun onEdit(post: Post) {
                 val bundle = Bundle().apply {
-                    //putString("draft", post.draft)
+                    putString("draft", post.draft)
                     putString("content", post.content)
                 }
                 viewModel.edit(post)

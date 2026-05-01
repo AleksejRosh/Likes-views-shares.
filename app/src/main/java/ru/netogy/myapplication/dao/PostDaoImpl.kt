@@ -16,11 +16,12 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             ${PostColumns.COLUMN_LIKED_BY_ME} BOOLEAN NOT NULL DEFAULT 0,
             ${PostColumns.COLUMN_LIKES} INTEGER NOT NULL DEFAULT 0,
             ${PostColumns.COLUMN_SHARES} INTEGER NOT NULL DEFAULT 0,
-            ${PostColumns.COLUMN_VIDEO} TEXT NOT NULL DEFAULT '');
+            ${PostColumns.COLUMN_VIDEO} TEXT NOT NULL DEFAULT '',
+            ${PostColumns.COLUMN_DRAFT} TEXT NOT NULL DEFAULT '')
         
         """.trimIndent()
     }
-     // ${PostColumns.COLUMN_DRAFT} TEXT NOT NULL DEFAULT ''
+
     object PostColumns {
         const val TABLE = "posts"
         const val COLUMN_ID = "id"
@@ -31,7 +32,7 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
         const val COLUMN_LIKES = "likes"
         const val COLUMN_SHARES = "shares"
         const val COLUMN_VIDEO  = "video"
-        //const val COLUMN_DRAFT = "draft"
+        const val COLUMN_DRAFT = "draft"
         val ALL_COLUMNS = arrayOf(
             COLUMN_ID,
             COLUMN_AUTHOR,
@@ -41,16 +42,17 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             COLUMN_LIKES,
             COLUMN_SHARES,
             COLUMN_VIDEO,
-            //COLUMN_DRAFT
+            COLUMN_DRAFT
         )
     }
 
     override fun getAll(): List<Post> {
         val posts = mutableListOf<Post>()
+        val selection = "${PostColumns.COLUMN_DRAFT} = '' OR ${PostColumns.COLUMN_DRAFT} IS NULL"
         db.query(
             PostColumns.TABLE,
             PostColumns.ALL_COLUMNS,
-            null,
+            selection,
             null,
             null,
             null,
@@ -68,7 +70,7 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             put(PostColumns.COLUMN_AUTHOR, "Me")
             put(PostColumns.COLUMN_CONTENT, post.content)
             put(PostColumns.COLUMN_PUBLISHED, "now")
-            //put(PostColumns.COLUMN_DRAFT, post.draft)
+            put(PostColumns.COLUMN_DRAFT, "")
         }
         val id = if (post.id != 0L) {
             db.update(
@@ -80,6 +82,45 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             post.id
         } else {
             db.insert(PostColumns.TABLE, null, values)
+        }
+        db.query(
+            PostColumns.TABLE,
+            PostColumns.ALL_COLUMNS,
+            "${PostColumns.COLUMN_ID} = ?",
+            arrayOf(id.toString()),
+            null,
+            null,
+            null,
+        ).use {
+            it.moveToNext()
+            return map(it)
+        }
+    }
+
+    override fun saveDraft(post: Post): Post {
+        val values = ContentValues().apply {
+            put(PostColumns.COLUMN_DRAFT, post.draft)
+        }
+        val id = if (post.id != 0L) {
+            db.update(
+                PostColumns.TABLE,
+                values,
+                "${PostColumns.COLUMN_ID} = ?",
+                arrayOf(post.id.toString()),
+            )
+            post.id
+        } else {
+            val initial = ContentValues().apply {
+                put(PostColumns.COLUMN_AUTHOR, "Me")
+                put(PostColumns.COLUMN_CONTENT, "")
+                put(PostColumns.COLUMN_PUBLISHED, "")
+                put(PostColumns.COLUMN_LIKED_BY_ME, 0)
+                put(PostColumns.COLUMN_LIKES, 0)
+                put(PostColumns.COLUMN_SHARES, 0)
+                put(PostColumns.COLUMN_VIDEO, "")
+                put(PostColumns.COLUMN_DRAFT, post.draft)
+            }
+            db.insert(PostColumns.TABLE, null, initial)
         }
         db.query(
             PostColumns.TABLE,
@@ -135,7 +176,7 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
                 likedByMe = getInt(getColumnIndexOrThrow(PostColumns.COLUMN_LIKED_BY_ME)) != 0,
                 shares = getInt(getColumnIndexOrThrow(PostColumns.COLUMN_SHARES)),
                 video = getString(getColumnIndexOrThrow(PostColumns.COLUMN_VIDEO)),
-                //draft = getString(getColumnIndexOrThrow(PostColumns.COLUMN_DRAFT))
+                draft = getString(getColumnIndexOrThrow(PostColumns.COLUMN_DRAFT))
             )
         }
     }

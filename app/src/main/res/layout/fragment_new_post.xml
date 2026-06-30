@@ -15,7 +15,7 @@
         android:background="@android:color/transparent"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        tools:ignore="LabelFor" />
+        tools:ignore="LabelFor"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"

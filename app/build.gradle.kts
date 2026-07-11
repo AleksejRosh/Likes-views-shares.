@@ -1,19 +1,20 @@
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    id("com.google.gms.google-services")
+    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.google.services)
 }
 
 android {
     namespace = "ru.netogy.myapplication"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "ru.netogy.myapplication"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -48,11 +49,16 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.gson)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.gson)
+    implementation(libs.androidx.room)
+    ksp(libs.androidx.room.compiler)
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.messaging)
+    implementation(libs.play.services)
+    coreLibraryDesugaring(libs.desugaring)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
 }
